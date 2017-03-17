@@ -110,7 +110,7 @@ uploadArchives {
                         name 'Kay-Uwe Janssen'
                         email 'k.janssen@evosec.de'
                         organization 'Evosec GmbH &amp; Co. KG'
-                        organizationUrl 'ttps://www.evosec.de/'
+                        organizationUrl 'https://www.evosec.de/'
                     }
                 }
             }
