@@ -95,7 +95,7 @@ uploadArchives {
                 scm {
                     connection 'scm:git:git@github.com:evosec/gradle-gitflow-release.git'
                     developerConnection 'scm:git:git@github.com:evosec/gradle-gitflow-release.git'
-                    url 'git@github.com:evosec/gradle-gitflow-release.gi'
+                    url 'git@github.com:evosec/gradle-gitflow-release.git'
                 }
 
                 licenses {
