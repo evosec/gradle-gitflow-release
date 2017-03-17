@@ -11,4 +11,6 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-    - ./gradlew clean build
+    - ./gradlew clean
+    - ./gradlew build
+#    - ./gradlew uploadArchives

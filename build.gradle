@@ -18,6 +18,7 @@ repositories {
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'idea'
 apply plugin: 'maven'
+apply plugin: 'signing'
 apply plugin: 'findbugs'
 apply plugin: 'org.owasp.dependencycheck'
 
@@ -64,6 +65,57 @@ task javadocJar(type: Jar) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+signing {
+    sign configurations.archives
+}
+signArchives.enabled = !(findProperty("signing.keyId") ?: "").isEmpty()
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                packaging 'jar'
+                name 'gradle-gitflow-release'
+                artifactId 'gradle-gitflow-release'
+                description 'Gitflow Release Plugin for Gradle'
+                url 'https://github.com/evosec/gradle-gitflow-release'
+
+                scm {
+                    connection 'scm:git:git@github.com:evosec/gradle-gitflow-release.git'
+                    developerConnection 'scm:git:git@github.com:evosec/gradle-gitflow-release.git'
+                    url 'git@github.com:evosec/gradle-gitflow-release.gi'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        name 'Kay-Uwe Janssen'
+                        email 'k.janssen@evosec.de'
+                        organization 'Evosec GmbH &amp; Co. KG'
+                        organizationUrl 'ttps://www.evosec.de/'
+                    }
+                }
+            }
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {
