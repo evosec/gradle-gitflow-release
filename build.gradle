@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "org.owasp:dependency-check-gradle:1.4.5"
+        classpath "org.owasp:dependency-check-gradle:1.4.5.1"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.4"
     }
 }
@@ -44,9 +44,6 @@ dependencyCheck {
     format = 'XML'
     autoUpdate = true
     failOnError = false
-    // workaround for issue between gradle 3.4.x and dependency check 1.4.5 can be removed with next dependency check version
-    // see https://github.com/jeremylong/dependency-check-gradle/issues/31
-    skipConfigurations = ["apiElements", "implementation", "runtimeElements", "runtimeOnly", "testImplementation", "testRuntimeOnly"]
 }
 
 compileJava {
