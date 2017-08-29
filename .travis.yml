@@ -15,7 +15,7 @@ script:
     - echo "ossrhPassword=\${env.SONATYPE_PASSWORD}" >> ~/.gradle.properties
     - ./gradlew clean
     - ./gradlew build
-#    - ./gradlew uploadArchives
+    - ./gradlew uploadArchives
 
 env:
   global:
