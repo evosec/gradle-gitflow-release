@@ -18,7 +18,7 @@ before_script:
 script:
   - ./gradlew clean
   - ./gradlew build
-  - ./gradlew uploadArchives -PossrhUsername="${SONATYPE_USERNAME}" -PossrhPassword="${SONATYPE_PASSWORD}" -Psigning.keyId="${GPG_KEY_NAME}" -Psigning.password="${GPG_PASSPHRASE}" -Psigning.secretKeyRingFile=$HOME/gnupg-code-signing/secring.gpg
+  - ./gradlew uploadArchives -PossrhUsername="${SONATYPE_USERNAME}" -PossrhPassword="${SONATYPE_PASSWORD}" -Psigning.keyId="${GPG_KEY_NAME}" -Psigning.password="${GPG_PASSPHRASE}" -Psigning.secretKeyRingFile=./gnupg-code-signing/secring.gpg
 
 env:
   global:
