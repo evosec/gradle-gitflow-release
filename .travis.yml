@@ -11,11 +11,9 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-    - echo "ossrhUsername=\${env.SONATYPE_USERNAME}" > ~/.gradle/gradle.properties
-    - echo "ossrhPassword=\${env.SONATYPE_PASSWORD}" >> ~/.gradle/.gradle.properties
     - ./gradlew clean
     - ./gradlew build
-    - ./gradlew uploadArchives
+    - ./gradlew uploadArchives -PossrhUsername="${env.SONATYPE_USERNAME}" -PossrhPassword="${env.SONATYPE_PASSWORD}"
 
 env:
   global:
