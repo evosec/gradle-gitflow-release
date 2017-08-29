@@ -13,7 +13,7 @@ cache:
 script:
     - ./gradlew clean
     - ./gradlew build
-    - ./gradlew uploadArchives -PossrhUsername="${env.SONATYPE_USERNAME}" -PossrhPassword="${env.SONATYPE_PASSWORD}"
+    - ./gradlew uploadArchives -PossrhUsername="${SONATYPE_USERNAME}" -PossrhPassword="${SONATYPE_PASSWORD}"
 
 env:
   global:
