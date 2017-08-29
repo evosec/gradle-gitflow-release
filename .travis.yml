@@ -12,13 +12,12 @@ cache:
 
 before_script:
   - openssl aes-256-cbc -K $encrypted_6b091118adcf_key -iv $encrypted_6b091118adcf_iv -in gnupg.tar.enc -out gnupg.tar -d
-    -in gnupg.tar.enc -out gnupg.tar -d
   - tar xvf gnupg.tar
 
 script:
   - ./gradlew clean
   - ./gradlew build
-  - ./gradlew uploadArchives -PossrhUsername="${SONATYPE_USERNAME}" -PossrhPassword="${SONATYPE_PASSWORD}" -Psigning.keyId="${GPG_KEY_NAME}" -Psigning.password="${GPG_PASSPHRASE}" -Psigning.secretKeyRingFile=./gnupg-code-signing/secring.gpg
+  - ./gradlew uploadArchives -PossrhUsername="${SONATYPE_USERNAME}" -PossrhPassword="${SONATYPE_PASSWORD}" -Psigning.keyId="${GPG_KEY_NAME}" -Psigning.password="${GPG_PASSPHRASE}" -Psigning.secretKeyRingFile=./gnupg/secring.gpg
 
 env:
   global:
