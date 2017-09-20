@@ -11,6 +11,7 @@ public class ReleaseExtension {
 
     private boolean failOnSnapshotDependencies = true;
     private boolean pushAfterReleaseFinish = false;
+    private boolean incrementMinorVersion = false;
 
     private String versionPropertyFile = "gradle.properties";
 
@@ -28,6 +29,9 @@ public class ReleaseExtension {
         }
         if (project.hasProperty("release.versionPropertyFile")) {
             setVersionPropertyFile(properties.get("release.versionPropertyFile").toString());
+        }
+        if (project.hasProperty("release.incrementMinorVersion")) {
+            setIncrementMinorVersion(Boolean.valueOf(properties.get("release.incrementMinorVersion").toString()));
         }
         if (project.hasProperty("release.pushAfterReleaseFinish")) {
             setPushAfterReleaseFinish(Boolean.valueOf(properties.get("release.pushAfterReleaseFinish").toString()));
@@ -67,6 +71,14 @@ public class ReleaseExtension {
 
     public void setPushAfterReleaseFinish(boolean pushAfterReleaseFinish) {
         this.pushAfterReleaseFinish = pushAfterReleaseFinish;
+    }
+
+    public boolean isIncrementMinorVersion() {
+        return incrementMinorVersion;
+    }
+
+    public void setIncrementMinorVersion(boolean incrementMinorVersion) {
+        this.incrementMinorVersion = incrementMinorVersion;
     }
 
     public String getVersionPropertyFile() {

@@ -19,7 +19,11 @@ public class ReleaseFinishTask extends AbstractTask {
 
         delay();
 
-        version = version.incrementPatchVersion("SNAPSHOT");
+        if (getPlugin().getExtension().isIncrementMinorVersion()) {
+            version = version.incrementMinorVersion("SNAPSHOT");
+        } else {
+            version = version.incrementPatchVersion("SNAPSHOT");
+        }
 
         updateVersionProperty(version.toString());
         flow.git().add().addFilepattern(getPropertiesFileName()).call();
