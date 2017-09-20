@@ -1,0 +1,120 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.owasp:dependency-check-gradle:2.1.1"
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'findbugs'
+apply plugin: 'org.owasp.dependencycheck'
+
+group = 'de.evosec'
+
+gradlePlugin {
+    plugins {
+        gradleGitflowRelease {
+            id = "de.evosec.gradle.gitflow.release"
+            implementationClass = "de.evosec.gradle.gitflow.release.ReleasePlugin"
+        }
+    }
+}
+
+dependencies {
+    compile 'com.atlassian.jgitflow:jgit-flow-core:0.21'
+    compile 'com.github.zafarkhaja:java-semver:0.9.0'
+}
+
+dependencyCheck {
+    format = 'XML'
+    autoUpdate = true
+    failOnError = false
+}
+
+compileJava {
+    sourceCompatibility "1.8"
+    targetCompatibility "1.8"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar) {
+    classifier = "javadoc"
+    from javadoc
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+signing {
+    sign configurations.archives
+}
+signArchives.enabled = !(findProperty("signing.keyId") ?: "").isEmpty()
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                packaging 'jar'
+                name 'gradle-gitflow-release'
+                artifactId 'gradle-gitflow-release'
+                description 'Gitflow Release Plugin for Gradle'
+                url 'https://github.com/evosec/gradle-gitflow-release'
+
+                scm {
+                    connection 'scm:git:git@github.com:evosec/gradle-gitflow-release.git'
+                    developerConnection 'scm:git:git@github.com:evosec/gradle-gitflow-release.git'
+                    url 'git@github.com:evosec/gradle-gitflow-release.git'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        name 'Kay-Uwe Janssen'
+                        email 'k.janssen@evosec.de'
+                        organization 'Evosec GmbH &amp; Co. KG'
+                        organizationUrl 'https://www.evosec.de/'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "3.4.1"
+}
