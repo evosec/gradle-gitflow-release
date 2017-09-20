@@ -35,7 +35,7 @@ release {
     username "git_username"                  // Username to be used to push changes. Default: null
     password "git_password"                  // Password to be used to push changes. Default: null
     failOnSnapshotDependencies true          // Should the release start fail when SNAPSHOT dependencies are found? Default: true
-    pushAfterReleaseFinish true              // Should the plugin push changes to remote after release finish? Default: true
+    pushAfterReleaseFinish false             // Should the plugin push changes to remote after release finish? Default: false
     versionPropertyFile "gradle.properties"  // properties file containing the "version" property. Default: gradle.properties  
 }
 ```

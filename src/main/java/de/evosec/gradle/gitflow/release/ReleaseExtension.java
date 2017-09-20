@@ -10,7 +10,7 @@ public class ReleaseExtension {
     private String password = null;
 
     private boolean failOnSnapshotDependencies = true;
-    private boolean pushAfterReleaseFinish = true;
+    private boolean pushAfterReleaseFinish = false;
 
     private String versionPropertyFile = "gradle.properties";
 
