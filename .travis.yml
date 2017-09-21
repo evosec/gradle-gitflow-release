@@ -21,7 +21,12 @@ before_script:
 script:
   - ./gradlew clean
   - ./gradlew build
-  - ./gradlew uploadArchives closeAndReleaseRepository -PossrhUsername="${SONATYPE_USERNAME}" -PossrhPassword="${SONATYPE_PASSWORD}" -Psigning.keyId="${GPG_KEY_NAME}" -Psigning.password="${GPG_PASSPHRASE}" -Psigning.secretKeyRingFile=./gnupg/secring.gpg
+  - |
+    if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then
+       ./gradlew uploadArchives closeAndReleaseRepository -PossrhUsername="${SONATYPE_USERNAME}" -PossrhPassword="${SONATYPE_PASSWORD}" -Psigning.keyId="${GPG_KEY_NAME}" -Psigning.password="${GPG_PASSPHRASE}" -Psigning.secretKeyRingFile=./gnupg/secring.gpg
+    else
+       ./gradlew uploadArchives -PossrhUsername="${SONATYPE_USERNAME}" -PossrhPassword="${SONATYPE_PASSWORD}" -Psigning.keyId="${GPG_KEY_NAME}" -Psigning.password="${GPG_PASSPHRASE}" -Psigning.secretKeyRingFile=./gnupg/secring.gpg
+    fi
 
 env:
   global:
