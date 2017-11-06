@@ -104,7 +104,7 @@ public class AbstractTask extends DefaultTask {
             Path path = Paths.get(file.getAbsolutePath());
             String propertesFile = new String(Files.readAllBytes(path), UTF_8);
 
-            Pattern pattern = Pattern.compile("^(" + key + "\\s*=\\s*).+$");
+            Pattern pattern = Pattern.compile("^(" + key + "\\s*=\\s*).+$", Pattern.MULTILINE);
             Matcher matcher = pattern.matcher(propertesFile);
             if (matcher.find()) {
                 matcher.replaceAll("$1" + version);
