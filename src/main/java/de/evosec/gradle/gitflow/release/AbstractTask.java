@@ -107,7 +107,7 @@ public class AbstractTask extends DefaultTask {
             Pattern pattern = Pattern.compile("^(" + key + "\\s*=\\s*).+$", Pattern.MULTILINE);
             Matcher matcher = pattern.matcher(propertesFile);
             if (matcher.find()) {
-                matcher.replaceAll("$1" + version);
+                propertesFile = matcher.replaceAll("$1" + version);
             } else {
                 throw new GradleException("could not write version");
             }
