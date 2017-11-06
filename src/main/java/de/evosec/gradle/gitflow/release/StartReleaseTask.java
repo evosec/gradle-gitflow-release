@@ -26,7 +26,9 @@ public class StartReleaseTask extends AbstractTask {
         Version version = Version.valueOf(getProject().getVersion().toString());
 
         try {
-            flow.releaseStart(version.getNormalVersion()).call();
+            flow.releaseStart(version.getNormalVersion())
+                    .setAllowUntracked(getPlugin().getExtension().isAllowUntracked())
+                    .call();
         } catch (DirtyWorkingTreeException e) {
             throw new GradleException(e.getMessage(), e);
         }
