@@ -62,8 +62,10 @@ public class StartReleaseTask extends AbstractTask {
                     })
                     .collect(toList());
 
-            messageBuilder.append("\n\t").append(project.getName())
-                    .append(": ").append(snapshotDependencies);
+            if (!snapshotDependencies.isEmpty()) {
+                messageBuilder.append("\n\t").append(project.getName())
+                        .append(": ").append(snapshotDependencies);
+            }
         };
     }
 
