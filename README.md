@@ -27,6 +27,7 @@ buildscript {
 apply plugin: "de.evosec.gradle.gitflow.release"
 ```
 
+**NOTE**: For projects with multiple modules apply the plugin to the toplevel `build.gradle` and not inside the `allprojects { }` block.
 
 ### Configure the plugin
 In your `build.gradle`
