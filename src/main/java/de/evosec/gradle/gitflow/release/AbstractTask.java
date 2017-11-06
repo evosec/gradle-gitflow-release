@@ -102,17 +102,17 @@ public class AbstractTask extends DefaultTask {
             // we use replace here as other ant tasks escape and modify the whole file
 
             Path path = Paths.get(file.getAbsolutePath());
-            String propertesFile = new String(Files.readAllBytes(path), UTF_8);
+            String propertiesFile = new String(Files.readAllBytes(path), UTF_8);
 
             Pattern pattern = Pattern.compile("^(" + key + "\\s*=\\s*).+$", Pattern.MULTILINE);
-            Matcher matcher = pattern.matcher(propertesFile);
+            Matcher matcher = pattern.matcher(propertiesFile);
             if (matcher.find()) {
-                propertesFile = matcher.replaceAll("$1" + version);
+                propertiesFile = matcher.replaceAll("$1" + version);
             } else {
                 throw new GradleException("could not write version");
             }
 
-            Files.write(path, propertesFile.getBytes(UTF_8));
+            Files.write(path, propertiesFile.getBytes(UTF_8));
 
         } catch (IOException e) {
             throw new GradleException("unable to update " + file.getName(), e);
