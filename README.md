@@ -38,6 +38,7 @@ release {
     failOnSnapshotDependencies true          // Should the release start fail when SNAPSHOT dependencies are found? Default: true
     pushAfterReleaseFinish false             // Should the plugin push changes to remote after release finish? Default: false
     incrementMinorVersion false              // Should the plugin increment the minor part of the version instead of the patch level? Default: false
+    allowUntracked false                     // Should the plugin allow untracked files in the workspace while release start/finish? Default: false
     versionPropertyFile "gradle.properties"  // properties file containing the "version" property. Default: gradle.properties  
 }
 ```

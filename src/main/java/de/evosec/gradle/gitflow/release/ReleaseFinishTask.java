@@ -15,7 +15,9 @@ public class ReleaseFinishTask extends AbstractTask {
 
         Version version = Version.valueOf(getProject().getVersion().toString());
 
-        flow.releaseFinish(version.getNormalVersion()).call();
+        flow.releaseFinish(version.getNormalVersion())
+                .setAllowUntracked(getPlugin().getExtension().isAllowUntracked())
+                .call();
 
         delay();
 
