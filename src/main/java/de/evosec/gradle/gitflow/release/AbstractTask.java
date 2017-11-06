@@ -14,9 +14,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.stream.Collectors.joining;
 
 public class AbstractTask extends DefaultTask {
 
@@ -101,12 +102,15 @@ public class AbstractTask extends DefaultTask {
             // we use replace here as other ant tasks escape and modify the whole file
 
             Path path = Paths.get(file.getAbsolutePath());
-            String propertesFile = readFile(path);
+            String propertesFile = new String(Files.readAllBytes(path), UTF_8);
 
-            String oldLine = key + "(\\s*)=(\\s*).+";
-            String newLine = key + "=" + version;
-
-            propertesFile = propertesFile.replaceAll(oldLine, newLine);
+            Pattern pattern = Pattern.compile("^(" + key + "\\s*=\\s*).+$");
+            Matcher matcher = pattern.matcher(propertesFile);
+            if (matcher.find()) {
+                matcher.replaceAll("$1" + version);
+            } else {
+                throw new GradleException("could not write version");
+            }
 
             Files.write(path, propertesFile.getBytes(UTF_8));
 
@@ -115,7 +119,4 @@ public class AbstractTask extends DefaultTask {
         }
     }
 
-    private String readFile(Path path) throws IOException {
-        return Files.readAllLines(path, UTF_8).stream().collect(joining("\r\n"));
-    }
 }
