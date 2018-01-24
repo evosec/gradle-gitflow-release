@@ -38,7 +38,7 @@ gradlePlugin {
 }
 
 release {
-    // allowUntracked true
+    allowUntracked true
     incrementMinorVersion true
 }
 
