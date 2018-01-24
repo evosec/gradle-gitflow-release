@@ -8,6 +8,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
+import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.tasks.TaskAction;
 
 import java.util.List;
@@ -57,6 +58,7 @@ public class StartReleaseTask extends AbstractTask {
             List<String> snapshotDependencies = project.getConfigurations()
                     .stream()
                     .flatMap(c -> c.getDependencies().stream())
+                    .filter(d-> !(d instanceof ProjectDependency))
                     .filter(d -> d.getVersion() != null && d.getVersion().contains("SNAPSHOT"))
                     .map(d -> {
                         String group = d.getGroup() == null ? "" : d.getGroup();
