@@ -9,6 +9,8 @@ public class ReleaseExtension {
     private String username = null;
     private String password = null;
 
+    private int androidVersionCodeOffset = 0;
+
     private boolean failOnSnapshotDependencies = true;
     private boolean pushAfterReleaseFinish = false;
     private boolean incrementMinorVersion = false;
@@ -43,6 +45,9 @@ public class ReleaseExtension {
         if (project.hasProperty("release.failOnSnapshotDependencies")) {
             setFailOnSnapshotDependencies(Boolean.valueOf(properties.get("release.failOnSnapshotDependencies").toString()));
         }
+        if (project.hasProperty("release.androidVersionCodeOffset")) {
+            setAndroidVersionCodeOffset(Integer.parseInt(properties.get("release.androidVersionCodeOffset").toString()));
+        }
     }
 
     public String getUsername() {
@@ -59,6 +64,14 @@ public class ReleaseExtension {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getAndroidVersionCodeOffset() {
+        return androidVersionCodeOffset;
+    }
+
+    public void setAndroidVersionCodeOffset(int androidVersionCodeOffset) {
+        this.androidVersionCodeOffset = androidVersionCodeOffset;
     }
 
     public boolean isFailOnSnapshotDependencies() {
