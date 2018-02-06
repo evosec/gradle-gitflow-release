@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="gradle-gitflow-release_main" target="1.8" />
+      <module name="gradle-gitflow-release_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
