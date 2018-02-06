@@ -15,7 +15,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class StartReleaseTask extends AbstractTask {
+public class ReleaseStartTask extends AbstractTask {
 
     @TaskAction
     public void releaseStart() throws JGitFlowException, GitAPIException {

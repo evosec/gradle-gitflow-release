@@ -19,7 +19,7 @@ public class ReleasePlugin implements Plugin<Project> {
 
         project.allprojects(this::setAndroidVersion);
 
-        project.getTasks().create("releaseStart", StartReleaseTask.class, task -> task.setPlugin(ReleasePlugin.this));
+        project.getTasks().create("releaseStart", ReleaseStartTask.class, task -> task.setPlugin(ReleasePlugin.this));
         project.getTasks().create("releaseFinish", ReleaseFinishTask.class, task -> task.setPlugin(ReleasePlugin.this));
     }
 
