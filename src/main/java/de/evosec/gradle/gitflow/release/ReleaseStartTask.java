@@ -34,9 +34,7 @@ public class ReleaseStartTask extends AbstractTask {
             throw new GradleException(e.getMessage(), e);
         }
 
-        updateVersionProperty(version.getNormalVersion());
-        flow.git().add().setUpdate(true).addFilepattern(getPropertiesFileName()).call();
-        flow.git().commit().setMessage("update version to " + getProject().getVersion() + " release").call();
+        updateVersionAndCommit(flow, version.getNormalVersion(), "release");
     }
 
     private void checkSnapshotDependencies() {
