@@ -2,6 +2,7 @@ package de.evosec.gradle.gitflow.release;
 
 import com.atlassian.jgitflow.core.JGitFlow;
 import com.atlassian.jgitflow.core.exception.JGitFlowException;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -42,6 +42,18 @@ public class AbstractTask extends DefaultTask {
         return flow;
     }
 
+    protected void updateVersionAndCommit(JGitFlow flow, String targetVersion, String versionType) throws GitAPIException {
+        String filepattern = findWorkTree()
+                .toPath()
+                .normalize()
+                .relativize(findPropertiesFile())
+                .toString();
+
+        updateVersionProperty(targetVersion);
+        flow.git().add().addFilepattern(filepattern).call();
+        flow.git().commit().setMessage("update version to " + targetVersion + " " + versionType).call();
+    }
+
     private File findWorkTree() {
         FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
 
@@ -59,18 +71,13 @@ public class AbstractTask extends DefaultTask {
     }
 
     protected void checkPropertiesFile() {
-        File propertiesFile = findPropertiesFile();
-
-        if (!propertiesFile.canRead() || !propertiesFile.canWrite()) {
-            throw new GradleException("Unable to update version property. Please check file permissions.");
-        }
-
         Properties properties = new Properties();
-        Path path = Paths.get(propertiesFile.getAbsolutePath());
+        Path path = findPropertiesFile();
+
         try (InputStream is = Files.newInputStream(path)) {
             properties.load(is);
         } catch (IOException e) {
-            throw new GradleException("unable to read " + propertiesFile.getName(), e);
+            throw new GradleException("unable to read " + path.getFileName().toString(), e);
         }
 
         // set the project version from the properties file if it was not otherwise specified
@@ -84,41 +91,29 @@ public class AbstractTask extends DefaultTask {
         return getProject().getVersion() != null && !"unspecified".equals(getProject().getVersion());
     }
 
-    private File findPropertiesFile() {
+    private Path findPropertiesFile() {
         String versionPropertyFileName = plugin.getExtension().getVersionPropertyFile();
         File propertiesFile = getProject().file(versionPropertyFileName);
         if (!propertiesFile.isFile()) {
             throw new GradleException("version property file [" + versionPropertyFileName + "] not found, please create it manually and and specify the version property.");
         }
-        return propertiesFile;
+        return propertiesFile.getAbsoluteFile().toPath();
     }
-
 
     protected void updateVersionProperty(String newVersion) {
         String oldVersion = "${project.version}";
         if (!Objects.equals(oldVersion, newVersion)) {
             getProject().setVersion(newVersion);
             getProject().subprojects(subProject -> subProject.setVersion(newVersion));
-            File propFile = findPropertiesFile();
+            Path propFile = findPropertiesFile();
             writeVersion(propFile, "version", newVersion);
         }
     }
 
-    @Internal
-    protected String getPropertiesFileName() {
-        File file = findPropertiesFile();
-        File directory = new File(".");
-
-        int pathLen = directory.getAbsolutePath().length();
-
-        return file.getAbsolutePath().substring(pathLen - 1);
-    }
-
-    private void writeVersion(File file, String key, String version) {
+    private void writeVersion(Path path, String key, String version) {
         try {
             // we use replace here as other ant tasks escape and modify the whole file
 
-            Path path = Paths.get(file.getAbsolutePath());
             String propertiesFile = new String(Files.readAllBytes(path), UTF_8);
 
             Pattern pattern = Pattern.compile("^(" + key + "\\s*=\\s*).+$", Pattern.MULTILINE);
@@ -132,7 +127,7 @@ public class AbstractTask extends DefaultTask {
             Files.write(path, propertiesFile.getBytes(UTF_8));
 
         } catch (IOException e) {
-            throw new GradleException("unable to update " + file.getName(), e);
+            throw new GradleException("unable to update " + path.getFileName().toString(), e);
         }
     }
 

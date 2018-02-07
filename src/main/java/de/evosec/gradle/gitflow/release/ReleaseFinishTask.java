@@ -27,9 +27,7 @@ public class ReleaseFinishTask extends AbstractTask {
             version = version.incrementPatchVersion("SNAPSHOT");
         }
 
-        updateVersionProperty(version.toString());
-        flow.git().add().addFilepattern(getPropertiesFileName()).call();
-        flow.git().commit().setMessage("update version to " + version.toString() + " development").call();
+        updateVersionAndCommit(flow, version.toString(), "development");
 
         if (getPlugin().getExtension().isPushAfterReleaseFinish()) {
             flow.git().push().setPushTags().setPushAll().call();
