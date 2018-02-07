@@ -2,6 +2,7 @@ package de.evosec.gradle.gitflow.release;
 
 import com.atlassian.jgitflow.core.JGitFlow;
 import com.atlassian.jgitflow.core.exception.JGitFlowException;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.tasks.Internal;
@@ -36,9 +37,25 @@ public class AbstractTask extends DefaultTask {
 
     protected JGitFlow ensureGitFlow() throws JGitFlowException {
         if (flow == null) {
-            flow = JGitFlow.getOrInit(new File("."));
+            flow = JGitFlow.getOrInit(findWorkTree());
         }
         return flow;
+    }
+
+    private File findWorkTree() {
+        FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
+
+        repositoryBuilder.findGitDir();
+
+        if (repositoryBuilder.getGitDir() == null) {
+            throw new IllegalStateException("unable to find git working directory");
+        }
+
+        try {
+            return repositoryBuilder.build().getWorkTree();
+        } catch (IOException e) {
+            throw new IllegalStateException("unable to find git working directory", e);
+        }
     }
 
     protected void checkPropertiesFile() {
