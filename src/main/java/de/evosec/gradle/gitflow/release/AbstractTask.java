@@ -77,7 +77,7 @@ public class AbstractTask extends DefaultTask {
         try (InputStream is = Files.newInputStream(path)) {
             properties.load(is);
         } catch (IOException e) {
-            throw new GradleException("unable to read " + path.getFileName().toString(), e);
+            throw new GradleException("unable to read " + getFilename(path), e);
         }
 
         // set the project version from the properties file if it was not otherwise specified
@@ -127,8 +127,12 @@ public class AbstractTask extends DefaultTask {
             Files.write(path, propertiesFile.getBytes(UTF_8));
 
         } catch (IOException e) {
-            throw new GradleException("unable to update " + path.getFileName().toString(), e);
+            throw new GradleException("unable to update " + getFilename(path), e);
         }
     }
 
+    private String getFilename(Path path) {
+        Path fileName = path.getFileName();
+        return fileName == null ? path.toString() : fileName.toString();
+    }
 }
