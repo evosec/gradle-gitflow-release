@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/gradle-gitflow-release.iml" filepath="$PROJECT_DIR$/.idea/gradle-gitflow-release.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/gradle-gitflow-release_main.iml" filepath="$PROJECT_DIR$/.idea/modules/gradle-gitflow-release_main.iml" group="gradle-gitflow-release" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gradle-gitflow-release_test.iml" filepath="$PROJECT_DIR$/.idea/modules/gradle-gitflow-release_test.iml" group="gradle-gitflow-release" />
     </modules>
   </component>
 </project>
