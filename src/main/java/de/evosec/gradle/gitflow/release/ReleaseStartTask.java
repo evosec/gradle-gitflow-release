@@ -58,7 +58,7 @@ public class ReleaseStartTask extends AbstractTask {
             List<String> snapshotDependencies = project.getConfigurations()
                     .stream()
                     .flatMap(c -> c.getDependencies().stream())
-                    .filter(d-> !(d instanceof ProjectDependency))
+                    .filter(d -> !(d instanceof ProjectDependency))
                     .filter(d -> d.getVersion() != null && d.getVersion().contains("SNAPSHOT"))
                     .map(d -> {
                         String group = d.getGroup() == null ? "" : d.getGroup();
