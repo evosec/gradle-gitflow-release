@@ -17,7 +17,7 @@ public class ReleasePlugin implements Plugin<Project> {
 
         CredentialsProvider.setDefault(new GitCredentialsProvider(extension));
 
-        project.allprojects(this::setAndroidVersion);
+        project.afterEvaluate(p -> project.allprojects(this::setAndroidVersion));
 
         project.getTasks().create("releaseStart", ReleaseStartTask.class, task -> task.setPlugin(ReleasePlugin.this));
         project.getTasks().create("releaseFinish", ReleaseFinishTask.class, task -> task.setPlugin(ReleasePlugin.this));
